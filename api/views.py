@@ -21,7 +21,7 @@ class UniversiteApiView(ModelViewSet):
         universiteData = request.data
         newUniversite = Universite.objects.create(
             nom_univ = universiteData['nom_univ'],
-            single = universiteData['single']
+            sigle = universiteData['single']
         )
         newUniversite.save()
         serializer = UniversiteSerializer(newUniversite)

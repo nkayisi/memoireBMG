@@ -4,17 +4,27 @@
 
 {% block contentDashboard %}
 
+    {% if messages %}
+        <ul class="message p-0" style="list-style-type: none;">
+            {% for message in messages %}
+                <li class="list-group-item-success"
+                style="font-size:12px; padding: 14px; text-align:center;">
+                    {{ message }}
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
     <div class="row page-titles mx-0">
         <div class="col-sm-6 p-md-0">
             <div class="welcome-text">
-                <h4>Hi, welcome back!</h4>
-                <p class="mb-0">Your business dashboard template</p>
+                <h4>Salut, Bienvenue..!</h4>
+                <p class="mb-0">Administrer votre université en toute sécurité</p>
             </div>
         </div>
         <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="javascript:void(0)">Layout</a></li>
-                <li class="breadcrumb-item active"><a href="javascript:void(0)">Blank</a></li>
+                <li class="breadcrumb-item"><a href="javascript:void(0)">{{ request.user.username}}</a></li>
             </ol>
         </div>
     </div>
@@ -27,8 +37,8 @@
                         <i class="ti-money text-success border-success"></i>
                     </div>
                     <div class="stat-content d-inline-block">
-                        <div class="stat-text">Profit</div>
-                        <div class="stat-digit">1,012</div>
+                        <div class="stat-text">Facultés</div>
+                        <div class="stat-digit"> {{ facultes.count }} </div>
                     </div>
                 </div>
             </div>
@@ -40,8 +50,8 @@
                         <i class="ti-user text-primary border-primary"></i>
                     </div>
                     <div class="stat-content d-inline-block">
-                        <div class="stat-text">Customer</div>
-                        <div class="stat-digit">961</div>
+                        <div class="stat-text">Départements</div>
+                        <div class="stat-digit"> {{ departements.count }} </div>
                     </div>
                 </div>
             </div>
@@ -53,8 +63,8 @@
                         <i class="ti-layout-grid2 text-pink border-pink"></i>
                     </div>
                     <div class="stat-content d-inline-block">
-                        <div class="stat-text">Projects</div>
-                        <div class="stat-digit">770</div>
+                        <div class="stat-text">Promotions</div>
+                        <div class="stat-digit"> {{ promotions.count }} </div>
                     </div>
                 </div>
             </div>
@@ -66,134 +76,230 @@
                         <i class="ti-link text-danger border-danger"></i>
                     </div>
                     <div class="stat-content d-inline-block">
-                        <div class="stat-text">Referral</div>
-                        <div class="stat-digit">2,781</div>
+                        <div class="stat-text">Cours</div>
+                        <div class="stat-digit"> {{ cours.count }} </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-12">
+
+        <div class="col-lg-5">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">All Exam Result</h4>
+                    <h4 class="card-title">Facultés</h4>
+                    <a href="#" class="btn list-group-item-warning" data-bs-toggle="modal" 
+                            data-bs-target="#facultyModal" data-bs-whatever="@mdo">
+                            Ajouter
+                    </a>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table student-data-table m-t-20">
                             <thead>
                                 <tr>
-                                    <th>Subject</th>
-                                    <th>Grade Point</th>
-                                    <th>Percent Form</th>
-                                    <th>Percent Upto</th>
-                                    <th>Date</th>
+                                    <th>Id</th>
+                                    <th>Nom Faculté</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Class Test</td>
-                                    <td>Mathmatics</td>
-                                    <td>
-                                        4.00
-                                    </td>
-                                    <td>
-                                        95.00
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                    <td>20/04/2017</td>
-                                </tr>
-                                <tr>
-                                    <td>Class Test</td>
-                                    <td>Mathmatics</td>
-                                    <td>
-                                        4.00
-                                    </td>
-                                    <td>
-                                        95.00
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                    <td>20/04/2017</td>
-                                </tr>
-                                <tr>
-                                    <td>Class Test</td>
-                                    <td>English</td>
-                                    <td>
-                                        4.00
-                                    </td>
-                                    <td>
-                                        95.00
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                    <td>20/04/2017</td>
-                                </tr>
-                                <tr>
-                                    <td>Class Test</td>
-                                    <td>Bangla</td>
-                                    <td>
-                                        4.00
-                                    </td>
-                                    <td>
-                                        95.00
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                    <td>20/04/2017</td>
-                                </tr>
-                                <tr>
-                                    <td>Class Test</td>
-                                    <td>Mathmatics</td>
-                                    <td>
-                                        4.00
-                                    </td>
-                                    <td>
-                                        95.00
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                    <td>20/04/2017</td>
-                                </tr>
-                                <tr>
-                                    <td>Class Test</td>
-                                    <td>English</td>
-                                    <td>
-                                        4.00
-                                    </td>
-                                    <td>
-                                        95.00
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                    <td>20/04/2017</td>
-                                </tr>
-                                <tr>
-                                    <td>Class Test</td>
-                                    <td>Mathmatics</td>
-                                    <td>
-                                        4.00
-                                    </td>
-                                    <td>
-                                        95.00
-                                    </td>
-                                    <td>
-                                        100
-                                    </td>
-                                    <td>20/04/2017</td>
-                                </tr>
+                                {% for faculte in facultes %}
+                                    <tr>
+                                        <td> {{ faculte.id }} </td>
+                                        <td> {{ faculte.nom_fac }} </td>
+                                    </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Départements</h4>
+                    <a href="#" class="btn list-group-item-warning" data-bs-toggle="modal" 
+                            data-bs-target="#departementModal" data-bs-whatever="@mdo">
+                            Ajouter
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table student-data-table m-t-20">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nom Département</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for departement in departements %}
+                                    <tr>
+                                        <td> {{ departement.id }} </td>
+                                        <td> {{ departement.nom_depart }} </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Promotions</h4>
+                    <a href="#" class="btn list-group-item-warning" data-bs-toggle="modal" 
+                            data-bs-target="#promotionModal" data-bs-whatever="@mdo">
+                            Ajouter
+                    </a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table student-data-table m-t-20">
+                            <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Nom Promotion</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for promotion in promotions %}
+                                    <tr>
+                                        <td> {{ promotion.id }} </td>
+                                        <td> {{ promotion.nom_prom }} </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Faculty Modal -->
+    <div class="modal fade" id="facultyModal" aria-hidden="true" aria-labelledby="facultyModalLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="facultyModalLabel">Faculté</h3>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg class="btn-close" xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+    
+                    {% csrf_token %}
+    
+                    <div class="mb-3">
+                      <label for="nom_fac" class="form-label">Nom de la faculté*</label>
+                      <input type="text" name="nom_fac" class="form-control" id="nom_fac" required>
+                    </div>
+                    
+    
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn list-group-item-danger btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            Anniler
+                        </button>
+                        <button  class="btn list-group-item-primary">Enregistrer</button>                
+                    </div>
+                    
+                  </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department Modal -->
+    <div class="modal fade" id="departementModal" aria-hidden="true" aria-labelledby="departementModalLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="departementModalLabel">Département</h3>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg class="btn-close" xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+    
+                    {% csrf_token %}
+    
+                    <div class="mb-3">
+                      <label for="nom_depart" class="form-label">Nom du département*</label>
+                      <input type="text" name="nom_depart" class="form-control" id="nom_depart" required>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="faculte" class="form-label">Faculté*</label>
+                        <select id="faculte" name="faculte" placeholder="Département" class="form-select form-control" required>
+                            <option></option>
+                            {% for faculte in facultes %}
+                                <option><span class="text-white">{{ faculte.id }}-</span>
+                                    {{ faculte.nom_fac }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+    
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn list-group-item-danger btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            Anniler
+                        </button>
+                        <button  class="btn list-group-item-primary">Enregistrer</button>                
+                    </div>
+                    
+                  </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Promotion Modal -->
+    <div class="modal fade" id="promotionModal" aria-hidden="true" aria-labelledby="promotionModalLabel" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="promotionModalLabel">Département</h3>
+                <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <svg class="btn-close" xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+    
+                    {% csrf_token %}
+    
+                    <div class="mb-3">
+                      <label for="nom_prom" class="form-label">Nom de la promotion*</label>
+                      <input type="text" name="nom_prom" class="form-control" id="nom_prom" required>
+                    </div>
+                    
+    
+                    <div class="modal-footer mt-4">
+                        <button type="button" class="btn list-group-item-danger btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            Anniler
+                        </button>
+                        <button  class="btn list-group-item-primary">Enregistrer</button>                
+                    </div>
+                    
+                  </form>
+            </div>
             </div>
         </div>
     </div>

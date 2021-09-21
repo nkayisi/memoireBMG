@@ -1,16 +1,19 @@
 from django.db import models
 
+from django.contrib.auth.models import User
+
 
 
 class Universite(models.Model):
     nom_univ = models.CharField(max_length=50)
-    single = models.CharField(max_length=10)
+    sigle = models.CharField(max_length=10)
+    bp = models.CharField(max_length=20, blank=True, null=True)
 
-    # admin = models.OneToOneField("app.Model", on_delete=models.CASCADE)
+    admin = models.OneToOneField(User, on_delete=models.CASCADE , blank=True, null=True)
 
 
     def __str__(self):
-        return self.single
+        return self.sigle
 
 
 
@@ -38,8 +41,7 @@ class Departement(models.Model):
 class Promotion(models.Model):
     nom_prom = models.CharField(max_length=50)
 
-    departement = models.ForeignKey(Departement, on_delete=models.CASCADE)
-
+    universite = models.ForeignKey(Universite, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.nom_prom
@@ -47,28 +49,29 @@ class Promotion(models.Model):
 
 
 class Enseignant(models.Model):
-    nom_enseigant = models.CharField(max_length=20)
+    nom_enseignant = models.CharField(max_length=20)
     post_nom_enseignant = models.CharField(max_length=20)
     num_tel = models.CharField(max_length=15)
 
-    # user = models.OneToOneField("app.Model", verbose_name=_(""), on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        return f"${self.nom} ${self.post_nom}"
+        return f"{self.nom_enseignant} {self.post_nom_enseignant}"
 
 
 
 
 class Cours(models.Model):
     code = models.CharField(max_length=20)
-    nom_course = models.CharField(max_length=50)
+    nom_cours = models.CharField(max_length=50)
 
-    promotion = models.ManyToManyField(Promotion)
-    enseignant = models.OneToOneField(Enseignant, on_delete=models.CASCADE)
+    departement = models.ForeignKey(Departement, on_delete=models.CASCADE)
+    promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
+    enseignant = models.ForeignKey(Enseignant, on_delete=models.CASCADE)
 
 
     def __str__(self):
-        return self.nom_course
+        return self.nom_cours
 
 
 
@@ -78,7 +81,10 @@ class Etudiant(models.Model):
     post_nom_etudiant = models.CharField(max_length=20)
     prenom_etudiant = models.CharField(max_length=20)
 
+
+    departement = models.ForeignKey(Departement, on_delete=models.CASCADE)
+
     promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"${self.matricule} ${self.prenom_etudiant}"
+        return f"{self.matricule} - {self.nom_etudiant} - {self.prenom_etudiant}"

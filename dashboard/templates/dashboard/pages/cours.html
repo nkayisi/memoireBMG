@@ -4,13 +4,12 @@
 
 {% block contentDashboard %}
 
-    <h1>Etudiants</h1>
+    <h1>Cours</h1>
 
     <div class="mb-4 text-right">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" 
-        data-bs-target="#exampleModalToggle" data-bs-whatever="@mdo">Ajouter etudiant</button>
+        data-bs-target="#exampleModalToggle" data-bs-whatever="@mdo">Ajouter cours</button>
     </div>
-
 
     {% if messages %}
         <ul class="message p-0" style="list-style-type: none;">
@@ -27,33 +26,33 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Toute les données étudiant</h4>
+                    <h4 class="card-title">Tout les cours de l'université</h4>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table student-data-table m-t-20">
                             <thead>
                                 <tr>
-                                    <th>Matricule</th>
-                                    <th>Nom</th>
-                                    <th>Post-nom</th>
-                                    <th>Prenom</th>
+                                    <th>Code-cours</th>
+                                    <th>Titre</th>
+                                    <th>Université</th>
                                     <th>Département</th>
                                     <th>Promotion</th>
+                                    <th>Nom et Post-nom enseignant</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for etudiant in etudiants %}
+                                {% for cours in cours %}
                                     <tr>
-                                        <td> {{ etudiant.matricule }} </td>
-                                        <td> {{ etudiant.nom_etudiant }} </td>
-                                        <td> {{ etudiant.post_nom_etudiant }} </td>
-                                        <td> {{ etudiant.prenom_etudiant }} </td>
-                                        <td> {{ etudiant.departement.nom_depart }} </td>
-                                        <td> {{ etudiant.promotion.nom_prom }} </td>
+                                        <td> {{ cours.code }} </td>
+                                        <td> {{ cours.nom_cours }} </td>
+                                        <td> {{ cours.departement.faculte.universite.sigle }} </td>
+                                        <td> {{ cours.departement.nom_depart }} </td>
+                                        <td> {{ cours.promotion.nom_prom }} </td>
+                                        <td> {{ cours.enseignant.nom_enseignant }} {{ cours.enseignant.post_nom_enseignant }} </td>
                                         <td> 
-                                            <a class="btn list-group-item-primary btn-sm" href="#">Modifier</a>
+                                            <a class="btn list-group-item-primary btn-sm" href="#">Exporter cote</a>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -66,12 +65,12 @@
     </div>
 
 
-    <!-- Add Student Modal -->
+    <!-- Add Course Modal -->
     <div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
         <div class="modal-header">
-            <h3 class="modal-title" id="exampleModalToggleLabel">Etudiant</h3>
+            <h3 class="modal-title" id="exampleModalToggleLabel">Cours</h3>
             <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close">
                 <svg class="btn-close" xmlns="http://www.w3.org/2000/svg" width="45" height="45" fill="currentColor" class="bi bi-x" viewBox="0 0 16 16">
                     <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
@@ -84,23 +83,13 @@
                 {% csrf_token %}
 
                 <div class="mb-3">
-                  <label for="matricule" class="form-label">Matricule*</label>
-                  <input type="text" name="matricule" class="form-control" id="matricule" required>
+                  <label for="code" class="form-label">Code du cours*</label>
+                  <input type="text" name="code" class="form-control" id="code" required>
                 </div>
 
                 <div class="mb-3">
-                  <label for="nom" class="form-label">Nom*</label>
-                  <input type="text" name="nom" class="form-control" id="nom" required>
-                </div>
-
-                <div class="mb-3">
-                    <label for="post_nom" class="form-label">Post-nom*</label>
-                    <input type="text" name="post_nom" class="form-control" id="post_nom" required>
-                </div>
-  
-                <div class="mb-3">
-                    <label for="prenom" class="form-label">Prenom*</label>
-                    <input type="text" name="prenom" class="form-control" id="prenom" required>
+                  <label for="titre_cours" class="form-label">Titre du cours*</label>
+                  <input type="text" name="titre_cours" class="form-control" id="titre_cours" required>
                 </div>
 
                 <div class="mb-3">
@@ -126,6 +115,19 @@
                         {% endfor %}
                     </select>
                 </div>
+
+                <div class="mb-3">
+                    <label for="enseignant" class="form-label">Enseignant*</label>
+                    <select id="enseignant" name="enseignant" class="form-select form-control" required>
+                        <option placeholder="enseignant"></option>
+                        {% for enseignant in enseignants %}
+                            <option><span style="color: white;">{{ enseignant.id }}-</span>
+                                {{ enseignant.nom_enseignant }} {{ enseignant.post_nom_enseignant }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
 
                 <div class="modal-footer mt-4">
                     <button type="button" class="btn list-group-item-danger btn-close" data-bs-dismiss="modal" aria-label="Close">

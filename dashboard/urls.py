@@ -12,4 +12,5 @@ urlpatterns = [
     path('etudiant/', dashboardViews.etudiant, name="etudiant"),
     path('universite/', dashboardViews.universite, name="universite"),
     path('profile/', dashboardViews.profile, name="profile"),
+    path('cours/', dashboardViews.cours, name="cours"),
 ]
