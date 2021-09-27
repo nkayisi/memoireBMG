@@ -106,7 +106,7 @@
                 <div class="mb-3">
                     <label for="departement" class="form-label">Département*</label>
                     <select id="departement" name="departement" placeholder="Département" class="form-select form-control" required>
-                        <option></option>
+                        <option selected disabled value="">Département</option>
                         {% for departement in departements %}
                             <option><span class="text-white">{{ departement.id }}-</span>
                                 {{ departement.nom_depart }}
@@ -118,7 +118,7 @@
                 <div class="mb-3">
                     <label for="promotion" class="form-label">Promotion*</label>
                     <select id="promotion" name="promotion" class="form-select form-control" required>
-                        <option placeholder="Promotion"></option>
+                        <option selected disabled value="">Promotion</option>
                         {% for promotion in promotions %}
                             <option><span style="color: white;">{{ promotion.id }}-</span>
                                 {{ promotion.nom_prom }}

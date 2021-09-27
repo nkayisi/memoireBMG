@@ -1,21 +1,69 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, HttpResponseRedirect
 
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
+
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+
+from django.views.generic import TemplateView
+from django.conf import settings
+
 
 from django.contrib import messages
 
 from api.models import *
 
 
+
+
+
+
+def loginView(request):
+
+    if request.method == 'POST':
+
+        nom_utilisateur = request.POST.get('nom_utilisateur')
+        mot_de_passe = request.POST.get('motDePasse')
+
+        user = authenticate(username=nom_utilisateur, password=mot_de_passe)
+
+        if user is not None:
+
+            group = user.groups.all()[0]
+
+            if user.is_active and group.name == 'admin':
+                login(request, user)
+                return redirect('accueil')
+            elif group.name != 'admin':
+                messages.warning(request, 'Ce compte n\'est pas autorisé pour se connecter sur cette interface ! '+
+                'Veillez entrer un autre type de compte.')
+
+    return render(request, "dashboard/pages/login.html")
+
+
+
+
+@login_required
 def accueil(request):
 
-    facultes = Faculte.objects.all()
-    departements = Departement.objects.all()
-    promotions = Promotion.objects.all()
-    cours = Cours.objects.all()
+    univ = request.user.universite
+    departements = []
+    cours = []
 
-    univ = Universite.objects.get(admin=request.user)
+    facultes = univ.faculte_set.all()
+    promotions = univ.promotion_set.all()
+
+    for faculte in facultes:
+        departs = faculte.departement_set.all()
+        for depart in departs:
+            departements.append(depart)
+
+
+    for departement in departements:
+        crs = departement.cours_set.all()
+        for cr in crs:
+            cours.append(cr)
 
     if request.method == 'POST':
         nom_fac = request.POST.get('nom_fac')
@@ -60,18 +108,20 @@ def accueil(request):
         'facultes': facultes,
         'departements': departements,
         'promotions': promotions,
-        'cours': cours
+        'cours': cours,
+        'total_depart': len(departements),
+        'total_cours': len(cours)
     }
 
     return render(request, 'dashboard/pages/index.html', context)
 
 
-
+@login_required
 def cotes(request):
     return render(request, 'dashboard/pages/cotes.html')
 
 
-
+@login_required
 def enseignant(request):
 
     if request.method == 'POST':
@@ -110,12 +160,34 @@ def enseignant(request):
     return render(request, 'dashboard/pages/enseignant.html')
 
 
-
+@login_required
 def etudiant(request):
 
-    departements = Departement.objects.all()
-    promotions = Promotion.objects.all()
-    etudiants = Etudiant.objects.all()
+
+    univ = request.user.universite
+    departements = []
+    cours = []
+    etudiants = []
+
+    facultes = univ.faculte_set.all()
+    promotions = univ.promotion_set.all()
+
+    for faculte in facultes:
+        departs = faculte.departement_set.all()
+        for depart in departs:
+            departements.append(depart)
+
+
+    for departement in departements:
+        crs = departement.cours_set.all()
+        ets = departement.etudiant_set.all()
+        for cr in crs:
+            cours.append(cr)
+
+        for et in ets:
+            etudiants.append(et)
+
+
 
     if request.method == 'POST':
 
@@ -147,7 +219,7 @@ def etudiant(request):
 
     return render(request, 'dashboard/pages/etudiant.html', context)
 
-
+@login_required
 def universite(request):
 
     if request.method == 'POST':
@@ -163,11 +235,12 @@ def universite(request):
         motDePasse = request.POST.get('motDePasse')
         
         # Create admin account
-        admin = User.objects.create(
+        admin = User.objects.create_user(
             username=nom_utilisateur, 
             email=email,
-            password= motDePasse
+            password = motDePasse
             )
+        
         group = Group.objects.get(name='admin')
         admin.groups.add(group)
 
@@ -191,18 +264,40 @@ def universite(request):
     return render(request, 'dashboard/pages/universite.html')
 
 
-
+@login_required
 def profile(request):
     return render(request, 'dashboard/pages/profile.html')
 
 
-
+@login_required
 def cours(request):
 
-    departements = Departement.objects.all()
-    promotions = Promotion.objects.all()
+    univ = request.user.universite
+    departements = []
+    cours = []
+    etudiants = []
+
+    facultes = univ.faculte_set.all()
+    promotions = univ.promotion_set.all()
+
+    for faculte in facultes:
+        departs = faculte.departement_set.all()
+        for depart in departs:
+            departements.append(depart)
+
+
+    for departement in departements:
+        crs = departement.cours_set.all()
+        ets = departement.etudiant_set.all()
+        for cr in crs:
+            cours.append(cr)
+
+        for et in ets:
+            etudiants.append(et)
+
+ 
     enseignants = Enseignant.objects.all()
-    cours = Cours.objects.all()
+
 
     if request.method == 'POST':
 
@@ -231,3 +326,10 @@ def cours(request):
         'cours': cours
     }
     return render(request, 'dashboard/pages/cours.html', context)
+
+
+
+@login_required
+def logOut(request):
+    logout(request)
+    return redirect('login')

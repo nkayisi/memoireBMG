@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+{% load crispy_forms_tags %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Focus - Bootstrap Admin Dashboard </title>
+
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dashboard/images/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/style/temp/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static 'dashboard/style/temp/owl.theme.default.min.css' %}">
+    <link href="{% static 'dashboard/style/temp/jqvmap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/style/temp/style.css' %}" rel="stylesheet">
+
+    <link href="{% static 'dashboard/style/temp/jquery.steps.css' %}" rel="stylesheet">
+
+    <!-- index-2 -->
+    <link href="{% static 'dashboard/style/temp/pignose.calendar.min.css' %}" rel="stylesheet">
+    <link href="{% static 'dashboard/style/temp/chartist.min.css' %}" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="{% static 'dashboard/style/icons/style.css' %}" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="{% static 'dashboard/style/main.css' %}">
+</head>
+
+<body h-100 class="mt-5 pt-5">
+    
+    <div class="authincation h-100 mt-5">
+            <div class="container-fluid h-100">
+                <div class="row justify-content-center h-100 align-items-center">
+                    <div class="col-md-6">
+                        <div class="authincation-content">
+                            <div class="row no-gutters">
+                                <div class="col-xl-12">
+                                {% if messages %}
+                                    <ul class="message p-0" style="list-style-type: none;">
+                                        {% for message in messages %}
+                                            <li class="list-group-item-warning"
+                                            style="font-size:14px; padding: 14px; text-align:center;">
+                                                {{ message }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                    <div class="auth-form">
+                                        <h1 class="text-center mb-4">Se connecter</h1>
+                                        <form method="POST">
+                                            {% csrf_token %}
+                                            <div class="form-group">
+                                                <label><strong>Nom d'utilisateur</strong></label>
+                                                <input type="text" name="nom_utilisateur" class="form-control" placeholder="bmg">
+                                            </div>
+                                            <div class="form-group">
+                                                <label><strong>Mot de passe</strong></label>
+                                                <input type="password" name="motDePasse" class="form-control" placeholder="Mot de passe">
+                                            </div>
+                                            <div class="form-row d-flex justify-content-between mt-4 mb-2">
+                                                <div class="form-group">
+                                                    <a href="#">Mot de passe oublié ?</a>
+                                                </div>
+                                            </div>
+                                            <div class="text-center">
+                                                <button type="submit" class="btn btn-primary btn-block">Se connecter</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+
+
+        <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="{% static 'dashboard/js/temp/global.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/quixnav-init.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/custom.min.js' %}"></script>
+
+
+    <!-- Vectormap -->
+    <script src="{% static 'dashboard/js/temp/raphael.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/morris.min.js' %}"></script>
+
+
+    <script src="{% static 'dashboard/js/temp/circle-progress.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/chart.js/' %}"></script>
+
+    <script src="{% static 'dashboard/js/temp/gauge.min.js' %}"></script>
+
+    <!--  flot-chart js -->
+    <script src="{% static 'dashboard/js/temp/jquery.flot.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/jquery.flot.resize.js' %}"></script>
+
+    <!-- Owl Carousel -->
+    <script src="{% static 'dashboard/js/temp/owl.carousel.min.js' %}"></script>
+
+    <!-- Counter Up -->
+    <script src="{% static 'dashboard/js/temp/jquery.vmap.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/jquery.vmap.usa.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/jquery.counterup.min.js' %}"></script>
+
+
+    <script src="{% static 'dashboard/js/temp/dashboard-1.js' %}"></script>
+
+    <!-- ndex-2 -->
+    <script src="{% static 'dashboard/js/temp/dashboard-2.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/chartist.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/moment.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/pignose.calendar.min.js' %}"></script>
+
+    <script src="{% static 'dashboard/js/temp/jquery.steps.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/jquery.validate.min.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/jquery.validate-init.js' %}"></script>
+    <script src="{% static 'dashboard/js/temp/jquery-steps-init.js' %}"></script>
+
+    <!-- bootstrap -->
+    <script src="{% static 'dashboard/js/bootstrap.min.js' %}"></script>
+
+
+
+</body>
