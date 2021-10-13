@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Focus - Bootstrap Admin Dashboard </title>
+    <title>Gestion des cotes </title>
     <!-- Favicon icon -->
     {% comment %} <link rel="icon" type="image/png" sizes="16x16" href="./images/favicon.png"> {% endcomment %}
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'dashboard/images/favicon.png' %}">
@@ -70,11 +70,15 @@
         <!--**********************************
             Nav header start
         ***********************************-->
-        <div class="nav-header">
-            <a href="index.html" class="brand-logo">
-                <img class="logo-abbr" src="{% static 'dashboard/images/logo.png' %}" alt="">
+        <div class="nav-header" >
+            <a href="index.html" class=" ">
+                <!-- <img class="logo-abbr" src="{% static 'dashboard/images/logo.png' %}" alt="">
                 <img class="logo-compact" src="{% static 'dashboard/images/logo-text.png' %}" alt="">
-                <img class="brand-title" src="{% static 'dashboard/images/logo-text.png' %}" alt="">
+                <img class="brand-title" src="{% static 'dashboard/images/logo-text.png' %}" alt=""> -->
+                <span class="ml-2"> <h2 style="color: rgb(245, 237, 228); font-family:Verdana, Geneva, 
+                Tahoma, sans-serif;font-size: medium; text-align: center;">GESTION DES COTES APP</h2>
+                </span>
+            
             </a>
 
             <div class="nav-control">
@@ -101,7 +105,7 @@
                                 </span>
                                 <div class="dropdown-menu p-0 m-0">
                                     <form>
-                                        <input class="form-control" type="search" placeholder="Search" aria-label="Search">
+                                        <input class="form-control" type="search" placeholder=" " aria-label="Search">
                                     </form>
                                 </div>
                             </div>
@@ -109,13 +113,13 @@
 
                         <ul class="navbar-nav header-right">
                             <li class="nav-item dropdown notification_dropdown">
-                                <a class="nav-link" href="#" role="button" data-toggle="dropdown">
+                                <!-- <a class="nav-link" href="#" role="button" data-toggle="dropdown">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bell-fill" viewBox="0 0 16 16">
                                             <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zm.995-14.901a1 1 0 1 0-1.99 0A5.002 5.002 0 0 0 3 6c0 1.098-.5 6-2 7h14c-1.5-1-2-5.902-2-7 0-2.42-1.72-4.44-4.005-4.901z"/>
                                         </svg>
                                     <div class="pulse-css"></div>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right">
+                                </a> -->
+                                <!-- <div class="dropdown-menu dropdown-menu-right">
                                     <ul class="list-unstyled">
                                         <li class="media dropdown-item">
                                             <span class="success"><i class="ti-user"></i></span>
@@ -168,7 +172,7 @@
                                     </ul>
                                     <a class="all-notification" href="#">See all notifications <i
                                             class="ti-arrow-right"></i></a>
-                                </div>
+                                </div> -->
                             </li>
                             <li class="nav-item dropdown header-profile">
                                 <a class="nav-link" href="#" role="button" data-toggle="dropdown">
@@ -185,12 +189,12 @@
                                         </svg>
                                         <span class="ml-2">Profile </span>
                                     </a>
-                                    <a href="./email-inbox.html" class="dropdown-item">
+                                    <!-- <a href="./email-inbox.html" class="dropdown-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-envelope-open" viewBox="0 0 16 16">
                                             <path d="M8.47 1.318a1 1 0 0 0-.94 0l-6 3.2A1 1 0 0 0 1 5.4v.818l5.724 3.465L8 8.917l1.276.766L15 6.218V5.4a1 1 0 0 0-.53-.882l-6-3.2zM15 7.388l-4.754 2.877L15 13.117v-5.73zm-.035 6.874L8 10.083l-6.965 4.18A1 1 0 0 0 2 15h12a1 1 0 0 0 .965-.738zM1 13.117l4.754-2.852L1 7.387v5.73zM7.059.435a2 2 0 0 1 1.882 0l6 3.2A2 2 0 0 1 16 5.4V14a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V5.4a2 2 0 0 1 1.059-1.765l6-3.2z"/>
                                         </svg>
                                         <span class="ml-2">Inbox </span>
-                                    </a>
+                                    </a> -->
                                     <a href="{% url 'logout' %}" class="dropdown-item">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-power" viewBox="0 0 16 16">
                                             <path d="M7.5 1v7h1V1h-1z"/>
@@ -309,8 +313,8 @@
         ***********************************-->
         <div class="footer">
             <div class="copyright">
-                <p>Copyright © Designed &amp; Developed by <a href="#" target="_blank">Quixkit</a> 2019</p>
-                <p>Distributed by <a href="https://themewagon.com/" target="_blank">Themewagon</a></p> 
+                <p >App pour la gestion des cotes <a href="#" target="_blank"> Memoire</a></p>
+                <p> <a href="https://themewagon.com/" target="_blank"></a></p> 
             </div>
         </div>
         <!--**********************************
