@@ -6,7 +6,11 @@ name = "pypi"
 [packages]
 django = "*"
 django-crispy-forms = "*"
+<<<<<<< HEAD
 django-cors-headers = "*"
+=======
+django-rest-framework = "*"
+>>>>>>> 22c65738df00c4d95e500b4095f2ab630a27675f
 
 [dev-packages]
 
