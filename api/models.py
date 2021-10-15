@@ -69,6 +69,8 @@ class Cours(models.Model):
     promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
     enseignant = models.ForeignKey(Enseignant, on_delete=models.CASCADE)
 
+    cote = models.FileField(upload_to='cotes/', max_length=100, blank=True, null=True)
+
 
     def __str__(self):
         return self.nom_cours
@@ -88,3 +90,8 @@ class Etudiant(models.Model):
 
     def __str__(self):
         return f"{self.matricule} - {self.nom_etudiant} - {self.prenom_etudiant}"
+
+
+
+
+    

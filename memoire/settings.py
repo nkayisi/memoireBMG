@@ -27,6 +27,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8100',
+    'http://localhost:8200',
+]
+
 
 # Application definition
 
@@ -41,6 +46,7 @@ INSTALLED_APPS = [
     # Others
     'rest_framework',
     'crispy_forms',
+    'corsheaders',
 
     # My apps
     'api.apps.ApiConfig',
@@ -51,7 +57,11 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
+
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
+
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -127,6 +137,9 @@ USE_TZ = True
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR)
+MEDIA_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

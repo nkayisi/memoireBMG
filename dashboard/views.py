@@ -1,3 +1,4 @@
+import csv
 from django.shortcuts import render, redirect, HttpResponseRedirect
 
 from django.contrib.auth.models import User
@@ -13,6 +14,9 @@ from django.conf import settings
 from django.contrib import messages
 
 from api.models import *
+
+
+from api.utils import create_csv
 
 
 
@@ -118,7 +122,31 @@ def accueil(request):
 
 @login_required
 def cotes(request):
-    return render(request, 'dashboard/pages/cotes.html')
+
+    cours = Cours.objects.all()
+    file = open(f'{cours[2].cote}')
+
+    reader = csv.reader(file)
+
+    header = []
+    header = next(reader)
+    
+    print(header)
+
+    rows = []
+    for row in reader:
+        rows.append(row)
+    print(rows)
+    file.close()
+
+
+    context={
+        'header': header,
+        'rows': rows
+    }
+
+
+    return render(request, 'dashboard/pages/cotes.html', context)
 
 
 @login_required
@@ -305,15 +333,20 @@ def cours(request):
         code =  request.POST.get('code')
         titre_cours =  request.POST.get('titre_cours')
         id_depart =  request.POST.get('departement').split('-')[0]
+        depart = Departement.objects.get(id=id_depart)
         id_prom =  request.POST.get('promotion').split('-')[0]
+        prom = Promotion.objects.get(id=id_prom)
         id_enseignant =  request.POST.get('enseignant').split('-')[0]
+
+        file = create_csv(titre_cours, depart, prom)
 
         Cours.objects.create(
             code = code,
             nom_cours = titre_cours,
-            departement = Departement.objects.get(id=id_depart),
-            promotion = Promotion.objects.get(id=id_prom),
-            enseignant = Enseignant.objects.get(id=id_enseignant)
+            departement = depart,
+            promotion = prom,
+            enseignant = Enseignant.objects.get(id=id_enseignant),
+            cote = file
         )
 
         # Push a message on the template

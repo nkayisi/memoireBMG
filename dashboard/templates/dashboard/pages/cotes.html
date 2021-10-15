@@ -4,6 +4,51 @@
 
 {% block contentDashboard %}
 
-    <h1>Cotes</h1>
+    <h1>Cotes Etudiants</h1>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">All Exam Result</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table student-data-table m-t-20">
+                            <thead>
+                                <tr class="text-center">
+                                {% for h in header %}
+                                    <th>{{ h }}</th>
+                                {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in rows %}
+                                <tr>
+                                    <td>{{ row }}</td>
+                                    <td>
+                                        <input type="number" class="form-control w-50 mx-auto">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control w-50 mx-auto">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control w-50 mx-auto">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control w-50 mx-auto">
+                                    </td>
+                                    <td>
+                                        <input type="number" class="form-control w-50 mx-auto">
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock contentDashboard %}
