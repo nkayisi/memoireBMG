@@ -1,3 +1,4 @@
+from os import name
 from django.urls import path
 from django.urls.conf import include
 
@@ -23,5 +24,6 @@ router.register('etudiant', EtudiantApiView, basename='etudiant')
 urlpatterns = [
 
     path('', include(router.urls)),
+    path('cote/', CoteApiView.as_view(), name="cote"),
     
 ]

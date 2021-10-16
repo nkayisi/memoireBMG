@@ -1,5 +1,6 @@
 import csv
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.http.response import JsonResponse
+from django.shortcuts import get_object_or_404, render, redirect, HttpResponseRedirect, HttpResponse
 
 from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
@@ -11,15 +12,19 @@ from django.views.generic import TemplateView
 from django.conf import settings
 
 
+from django.contrib.auth.hashers import make_password
+
+
 from django.contrib import messages
 
 from api.models import *
 
 
-from api.utils import create_csv
+from api.utils import create_csv, write_csv
 
-
-
+import json
+import csv
+import requests
 
 
 
@@ -40,8 +45,8 @@ def loginView(request):
                 login(request, user)
                 return redirect('accueil')
             elif group.name != 'admin':
-                messages.warning(request, 'Ce compte n\'est pas autorisé pour se connecter sur cette interface ! '+
-                'Veillez entrer un autre type de compte.')
+                login(request, user)
+                return redirect('cotes')
 
     return render(request, "dashboard/pages/login.html")
 
@@ -142,11 +147,43 @@ def cotes(request):
 
     context={
         'header': header,
-        'rows': rows
+        'rows': rows,
+        'course_name': file.name
     }
 
 
     return render(request, 'dashboard/pages/cotes.html', context)
+
+
+def SomeFunction(request):
+    cotes = json.loads(request.GET['cotes'])
+
+    course_name = request.GET.get('course_name')
+    print(course_name)
+    
+    file = open(f'{course_name}', 'w')
+
+    writer = csv.writer(file)
+
+    writer.writerow(['Matricules', 'TP', 'TD', 'Intérogation', 'Examen', 'Total'])
+    
+    for cote in cotes:
+        writer.writerow([cote.get('Matricule'),cote.get('TP'),cote.get('TD'),cote.get('Interro'),cote.get('Examen')])
+        
+    return HttpResponse("OK")
+
+
+
+def download_csv(request, course_id):
+    cours = Cours.objects.get(id=course_id)
+    req = requests.get('http://127.0.0.1:8000/'+cours.cote.url)
+    url_content = req.content
+    csv_file = open(f'cotes/{cours.nom_cours}.csv', 'wb')
+
+    csv_file.write(url_content)
+    csv_file.close()
+
+    return redirect('cours')
 
 
 @login_required
@@ -166,7 +203,7 @@ def enseignant(request):
         user = User.objects.create(
             username = nom_utilisateur,
             email = email,
-            password = motDePasse
+            password = make_password(motDePasse)
         )
 
         # Set a group to the teacher's user
@@ -266,11 +303,13 @@ def universite(request):
         admin = User.objects.create_user(
             username=nom_utilisateur, 
             email=email,
-            password = motDePasse
+            password = make_password(motDePasse)
             )
         
         group = Group.objects.get(name='admin')
         admin.groups.add(group)
+        admin.is_staff = True
+        admin.save()
 
         print(admin)
 

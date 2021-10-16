@@ -1,12 +1,25 @@
 from django.shortcuts import render
 
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.views import APIView
 from rest_framework.response import Response
 
 from .models import *
 
 from .serializers import *
 
+from api.utils import write_csv
+
+from django.http import HttpResponseForbidden
+
+
+class CoteApiView(APIView):
+
+    def post(self, request, format=None):
+        print("DATA-1",request.data)
+        write_csv(request.data)
+
+        return HttpResponseForbidden()
 
 
 

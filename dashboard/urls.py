@@ -19,4 +19,6 @@ urlpatterns = [
     path('cours/', dashboardViews.cours, name="cours"),
 
     path('logout/', dashboardViews.logOut, name="logout"),
+    path('cotes/js/', dashboardViews.SomeFunction, name="cjs"),
+    path('download/csv/<str:course_id>/', dashboardViews.download_csv, name="download"),
 ]

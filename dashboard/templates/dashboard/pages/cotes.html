@@ -1,6 +1,6 @@
 {% extends 'dashboard/layouts/_base.html' %}
 
-
+{% load static %}
 
 {% block contentDashboard %}
 
@@ -14,41 +14,54 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table student-data-table m-t-20">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <table class="table student-data-table m-t-20" id="{{course_name}}">
                             <thead>
                                 <tr class="text-center">
                                 {% for h in header %}
-                                    <th>{{ h }}</th>
+                                    <th class="head">{{ h }}</th>
                                 {% endfor %}
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for row in rows %}
                                 <tr>
-                                    <td>{{ row }}</td>
+                                    {% for r in row %}
+                                        <td class="matricule">{{ r }}</td>
+                                    {% endfor %}
                                     <td>
-                                        <input type="number" class="form-control w-50 mx-auto">
+                                        <input required type="number" class="form-control w-50 mx-auto tp">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w-50 mx-auto">
+                                        <input required type="number" class="form-control w-50 mx-auto td">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w-50 mx-auto">
+                                        <input required type="number" class="form-control w-50 mx-auto interro">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w-50 mx-auto">
+                                        <input required type="number" class="form-control w-50 mx-auto examen">
                                     </td>
                                     <td>
-                                        <input type="number" class="form-control w-50 mx-auto">
+                                        <input required type="number" class="form-control w-50 mx-auto total">
                                     </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
+
+                        <div>
+                            <button onclick="sendData()" type="submit" class="btn list-group-item-primary" id="readCote">Coté</button>
+                        </div>
+                    </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    {% block script %}
+        <script src="{% static 'dashboard/js/cotes.js' %}"></script>
+    {% endblock script %}
 
 {% endblock contentDashboard %}

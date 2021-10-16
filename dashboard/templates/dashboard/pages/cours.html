@@ -52,7 +52,9 @@
                                         <td> {{ cours.promotion.nom_prom }} </td>
                                         <td> {{ cours.enseignant.nom_enseignant }} {{ cours.enseignant.post_nom_enseignant }} </td>
                                         <td> 
-                                            <a class="btn list-group-item-primary btn-sm" href="#">Exporter cote</a>
+                                        {% if cours.cote %}
+                                            <a class="btn list-group-item-primary btn-sm" href="{% url 'download' cours.id %}">Exporter cote</a>
+                                        {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
