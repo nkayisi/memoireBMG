@@ -55,3 +55,10 @@ class EtudiantSerializer(serializers.ModelSerializer):
         model = Etudiant
         fields = '__all__'
         depth = 4
+
+
+class CotesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= Cours
+        fields= '__all__'
+        depth= 5

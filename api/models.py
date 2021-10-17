@@ -92,6 +92,25 @@ class Etudiant(models.Model):
         return f"{self.matricule} - {self.nom_etudiant} - {self.prenom_etudiant}"
 
 
+class Cotes(models.Model):
+    
+    label=models.CharField(max_length=20)
+    cote=models.DecimalField(max_digits=5, decimal_places=2)
+    ponderation=models.DecimalField(max_length=5, decimal_places=2)
+
+    etudiant= models.ForeignKey(Etudiant, on_delete=models.CASCADE )
+    date=models.DateTimeField()
+    cours=models.ForeignKey(Cours, on_delete=models.CASCADE)
+    code=models.IntegerField(max_length=10)
+
+    def __str__(self):
+        return self.label
+
+
+
+
+
+
 
 
     

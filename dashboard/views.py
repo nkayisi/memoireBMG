@@ -37,6 +37,8 @@ def loginView(request):
 
         user = authenticate(username=nom_utilisateur, password=mot_de_passe)
 
+        print(user)
+
         if user is not None:
 
             group = user.groups.all()[0]
