@@ -96,21 +96,12 @@ class Cotes(models.Model):
     
     label=models.CharField(max_length=20)
     cote=models.DecimalField(max_digits=5, decimal_places=2)
-    ponderation=models.DecimalField(max_length=5, decimal_places=2)
-
+    ponderation=models.DecimalField(max_digits=5, decimal_places=2)
     etudiant= models.ForeignKey(Etudiant, on_delete=models.CASCADE )
-    date=models.DateTimeField()
+    date=models.DateTimeField(auto_now=False)
     cours=models.ForeignKey(Cours, on_delete=models.CASCADE)
-    code=models.IntegerField(max_length=10)
+    code=models.IntegerField()
 
     def __str__(self):
         return self.label
 
-
-
-
-
-
-
-
-    
