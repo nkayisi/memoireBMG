@@ -1,6 +1,7 @@
 from django.db import models
 
 from django.contrib.auth.models import User
+from django.db.models.enums import Choices
 
 
 
@@ -93,24 +94,20 @@ class Etudiant(models.Model):
 
 
 class Cotes(models.Model):
-    
-    label=models.CharField(max_length=20)
-    cote=models.DecimalField(max_digits=5, decimal_places=2)
-    ponderation=models.DecimalField(max_length=5, decimal_places=2)
-
+    LABELS =(
+        ("TP", "Travail Pratique"),
+        ("TD", "Travail Dirigé"),
+        ("INT", "Interrogation"),
+        ("EX", "Examen"),
+    )
+    label=models.CharField(max_length=50,choices=LABELS, verbose_name='Type de travail')
+    cote=models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
+    ponderation=models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Pondération')
     etudiant= models.ForeignKey(Etudiant, on_delete=models.CASCADE )
-    date=models.DateTimeField()
+    date=models.DateField(auto_now=False, verbose_name='A remettre le')
     cours=models.ForeignKey(Cours, on_delete=models.CASCADE)
-    code=models.IntegerField(max_length=10)
+    code=models.IntegerField(default=0)
 
     def __str__(self):
         return self.label
 
-
-
-
-
-
-
-
-    
