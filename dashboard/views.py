@@ -30,9 +30,8 @@ import requests
 
 
 @login_required
-def nouvelle_cote(request):
+def nouvelle_cote(request, cours_id):
     form = CotesForm()
-    enseignant = request.user
     if request.method == 'POST':
         form = CotesForm(request.POST)
         if form.is_valid():
@@ -44,27 +43,33 @@ def nouvelle_cote(request):
             # recuperer les etudiants
             etudiants = Etudiant.objects.all()
 
+            # trouver le cours pour lequel on cree la fiche des cotes
+            cours = Cours.objects.get(id=cours_id)
+
             # recuperer le dernier code de cours enfin de l'incrementer pour creer le nouveau
+            cote = None
             try:
                 cote = Cotes.objects.latest('id')
-                code = cote.code + 1
+                code = int(cote.code) + 1
+                print('Cote label', cote.code)
             except:
                 code = 1
 
             # creer les objets cote a partir des la liste des etudiants
             for et in etudiants:
-                print(et.matricule, code, enseignant)
-                # Cotes.objects.create(
-                #     label = label,
-                #     cote = None,
-                #     ponderation = ponderation,
-                #     date = date,
-                #     cours = 1,
-                #     code = code
-                # )
+                print(label,cote,ponderation,date,cours,code,)
+                Cotes.objects.create(
+                    label = label,
+                    cote = None,
+                    ponderation = ponderation,
+                    date = date,
+                    cours = cours,
+                    code = code,
+                    etudiant = et
+                )
 
         return redirect('cotes')
-    return render(request, 'dashboard/pages/nouvelle_cote.html', {'form': form})
+    return render(request, 'dashboard/pages/nouvelle_cote.html', {'form': form, 'cours_id':cours_id})
 
 
 def loginView(request):
@@ -168,31 +173,17 @@ def accueil(request):
 
 @login_required
 def cotes(request):
-
-    cours = Cours.objects.all()
-    file = open(f'{cours[2].cote}')
-
-    reader = csv.reader(file)
-
-    header = []
-    header = next(reader)
-    
-    print(header)
-
-    rows = []
-    for row in reader:
-        rows.append(row)
-    print(rows)
-    file.close()
-
+    try:
+        enseignant = Enseignant.objects.get(user=request.user)
+        cours = Cours.objects.filter(enseignant=enseignant)
+        pass
+    except:
+        messages.success(request, 'Connectez-vous avec un compte enseignant')
+        return redirect('login')
 
     context={
-        'header': header,
-        'rows': rows,
-        'course_name': file.name
+        'cours':cours
     }
-
-
     return render(request, 'dashboard/pages/cotes.html', context)
 
 
