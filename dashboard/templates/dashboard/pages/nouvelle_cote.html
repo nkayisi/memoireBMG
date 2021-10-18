@@ -1,0 +1,29 @@
+{% extends 'dashboard/layouts/_base.html' %}
+<!--static-->
+{% load static %}
+
+<!--main content-->
+{% block contentDashboard %}
+<h3>Nouveau TP</h3>
+<form method="POST" action="{% url 'nouvelle_cote' %}">
+  <div class="mb-3">
+    <label for="exampleInputEmail1" class="form-label">Email address</label>
+    <input
+      type="email"
+      class="form-control"
+      id="exampleInputEmail1"
+      aria-describedby="emailHelp"
+    />
+  </div>
+  {% csrf_token %} {{form}}
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+{% block script %}
+<script>
+  const timeField = document.querySelector("input[name='date']");
+  timeField.removeAttribute("type");
+  timeField.setAttribute("type", "date");
+</script>
+<script src="{% static 'dashboard/js/cotes.js' %}"></script>
+{% endblock script %} {% endblock contentDashboard %}

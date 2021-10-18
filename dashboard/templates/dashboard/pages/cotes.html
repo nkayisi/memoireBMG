@@ -1,67 +1,103 @@
 {% extends 'dashboard/layouts/_base.html' %}
-
+<!--static-->
 {% load static %}
 
+<!--main content-->
 {% block contentDashboard %}
 
-    <h1>Cotes Etudiants</h1>
+<h1>Cotes Etudiants</h1>
+<p class="mt-2">
+  <a href="{% url 'nouvelle_cote' %}" class="btn btn-primary"
+    >Créer un nouveau travail</a
+  >
+</p>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button
+      class="nav-link active"
+      id="nav-tp-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-tp"
+      type="button"
+      role="tab"
+      aria-controls="nav-tp"
+      aria-selected="true"
+    >
+      Travaux Pratiques
+    </button>
+    <button
+      class="nav-link"
+      id="nav-td-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-td"
+      type="button"
+      role="tab"
+      aria-controls="nav-td"
+      aria-selected="false"
+    >
+      Travaux Dirigés
+    </button>
+    <button
+      class="nav-link"
+      id="nav-int-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-int"
+      type="button"
+      role="tab"
+      aria-controls="nav-int"
+      aria-selected="false"
+    >
+      Interrogations
+    </button>
+    <button
+      class="nav-link"
+      id="nav-exam-tab"
+      data-bs-toggle="tab"
+      data-bs-target="#nav-exam"
+      type="button"
+      role="tab"
+      aria-controls="nav-exam"
+      aria-selected="false"
+    >
+      Examen
+    </button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div
+    class="tab-pane fade show active"
+    id="nav-tp"
+    role="tabpanel"
+    aria-labelledby="nav-tp-tab"
+  >
+    {% include 'dashboard/layouts/_tp.html' %}
+  </div>
+  <div
+    class="tab-pane fade"
+    id="nav-td"
+    role="tabpanel"
+    aria-labelledby="nav-td-tab"
+  >
+    {% include 'dashboard/layouts/_td.html' %}
+  </div>
+  <div
+    class="tab-pane fade"
+    id="nav-int"
+    role="tabpanel"
+    aria-labelledby="nav-int-tab"
+  >
+    {% include 'dashboard/layouts/_interro.html' %}
+  </div>
+  <div
+    class="tab-pane fade"
+    id="nav-exam"
+    role="tabpanel"
+    aria-labelledby="nav-exam-tab"
+  >
+    {% include 'dashboard/layouts/_exam.html' %}
+  </div>
+</div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="card-title">All Exam Result</h4>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <table class="table student-data-table m-t-20" id="{{course_name}}">
-                            <thead>
-                                <tr class="text-center">
-                                {% for h in header %}
-                                    <th class="head">{{ h }}</th>
-                                {% endfor %}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for row in rows %}
-                                <tr>
-                                    {% for r in row %}
-                                        <td class="matricule">{{ r }}</td>
-                                    {% endfor %}
-                                    <td>
-                                        <input required type="number" class="form-control w-50 mx-auto tp">
-                                    </td>
-                                    <td>
-                                        <input required type="number" class="form-control w-50 mx-auto td">
-                                    </td>
-                                    <td>
-                                        <input required type="number" class="form-control w-50 mx-auto interro">
-                                    </td>
-                                    <td>
-                                        <input required type="number" class="form-control w-50 mx-auto examen">
-                                    </td>
-                                    <td>
-                                        <input required type="number" class="form-control w-50 mx-auto total">
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-
-                        <div>
-                            <button onclick="sendData()" type="submit" class="btn list-group-item-primary" id="readCote">Coté</button>
-                        </div>
-                    </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {% block script %}
-        <script src="{% static 'dashboard/js/cotes.js' %}"></script>
-    {% endblock script %}
-
-{% endblock contentDashboard %}
+{% block script %}
+<script src="{% static 'dashboard/js/cotes.js' %}"></script>
+{% endblock script %} {% endblock contentDashboard %}

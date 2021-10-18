@@ -8,6 +8,7 @@ from . import views as dashboardViews
 
 
 urlpatterns = [
+    path('nouvelle-cote', dashboardViews.nouvelle_cote, name='nouvelle_cote'),
 
     path('', dashboardViews.accueil, name="accueil"),
     path('login/', dashboardViews.loginView, name="login"),   

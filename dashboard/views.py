@@ -19,6 +19,8 @@ from django.contrib import messages
 
 from api.models import *
 
+from .forms import CotesForm
+
 
 from api.utils import create_csv, write_csv
 
@@ -26,6 +28,43 @@ import json
 import csv
 import requests
 
+
+@login_required
+def nouvelle_cote(request):
+    form = CotesForm()
+    enseignant = request.user
+    if request.method == 'POST':
+        form = CotesForm(request.POST)
+        if form.is_valid():
+            # recuperer les donnees du formulaire
+            label = request.POST['label']
+            ponderation = request.POST['ponderation']
+            date = request.POST['date']
+
+            # recuperer les etudiants
+            etudiants = Etudiant.objects.all()
+
+            # recuperer le dernier code de cours enfin de l'incrementer pour creer le nouveau
+            try:
+                cote = Cotes.objects.latest('id')
+                code = cote.code + 1
+            except:
+                code = 1
+
+            # creer les objets cote a partir des la liste des etudiants
+            for et in etudiants:
+                print(et.matricule, code, enseignant)
+                # Cotes.objects.create(
+                #     label = label,
+                #     cote = None,
+                #     ponderation = ponderation,
+                #     date = date,
+                #     cours = 1,
+                #     code = code
+                # )
+
+        return redirect('cotes')
+    return render(request, 'dashboard/pages/nouvelle_cote.html', {'form': form})
 
 
 def loginView(request):
