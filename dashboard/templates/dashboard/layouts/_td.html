@@ -1,1 +1,48 @@
-<h1>TRAVAUX DIRIGES</h1>
+<h3 class="mt-4 mb-3">TRAVAUX DIRIGES</h3>
+
+{% if tds %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Num</th>
+      <th scope="col">Matricule</th>
+      {% for td in tds_count %}
+        <th scope="col">TD-{{forloop.counter}}</th>
+      {% endfor %}
+      <th scope="col">Total</th>
+      <th scope="col">Moyenne</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for cotes_et in cotes_etudiant %}
+  
+    <tr>
+
+      <th scope="row">{{forloop.counter}}</th>
+
+      <td>{{cotes_et.etudiant.matricule}}</td>
+
+        {% for td in tds %}
+
+          {% if td.etudiant.matricule ==  cotes_et.etudiant.matricule%}
+          <td >
+              <input type="hidden" value="{{td.ponderation}}" class="ponderation"/>
+              <input type="number" step=".01" id="{{td.id}}" class="form-control cote" 
+              type="text" placeholder="cote" aria-label="example" value="{{ td.cote  }}"/>
+          </td>
+          {% endif %}
+
+        {% endfor %}
+
+        <td class="total"></td>
+
+      <td class="moyenne"></td>
+
+    </tr>
+  {% endfor %}
+  </tbody>
+
+
+</table>
+{% endif %}

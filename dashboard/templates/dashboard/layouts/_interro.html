@@ -1,1 +1,47 @@
-<h1>INT</h1>
+<h3 class="mt-4 mb-3">INTERROGATIONS</h3>
+
+{% if interros %}
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Num</th>
+      <th scope="col">Matricule</th>
+      {% for interros in interros_count %}
+        <th scope="col">TP-{{forloop.counter}}</th>
+      {% endfor %}
+      <th scope="col">Total</th>
+      <th scope="col">Moyenne</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for cotes_et in cotes_etudiant %}
+  
+    <tr>
+
+      <th scope="row">{{forloop.counter}}</th>
+
+      <td>{{cotes_et.etudiant.matricule}}</td>
+
+        {% for interro in interros %}
+
+          {% if interro.etudiant.matricule ==  cotes_et.etudiant.matricule%}
+          <td >
+              <input type="hidden" value="{{interro.ponderation}}" class="ponderation"/>
+              <input type="number" step=".01" id="{{interro.id}}" class="form-control cote" 
+              type="text" placeholder="cote" aria-label="example" value="{{ interro.cote  }}"/>
+          </td>
+          {% endif %}
+
+        {% endfor %}
+
+        <td class="total"></td>
+
+      <td class="moyenne"></td>
+
+    </tr>
+  {% endfor %}
+  </tbody>
+
+</table>
+{% endif %}

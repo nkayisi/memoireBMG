@@ -59,6 +59,5 @@ class EtudiantSerializer(serializers.ModelSerializer):
 
 class CotesSerializer(serializers.ModelSerializer):
     class Meta:
-        model= Cours
+        model= Cotes
         fields= '__all__'
-        depth= 5

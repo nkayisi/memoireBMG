@@ -6,10 +6,11 @@ name = "pypi"
 [packages]
 django = "*"
 django-crispy-forms = "*"
-
 django-cors-headers = "*"
-
 django-rest-framework = "*"
+requests = "*"
+pandas = "*"
+openpyxl = "*"
 
 [dev-packages]
 

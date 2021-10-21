@@ -70,6 +70,8 @@ class Cours(models.Model):
     promotion = models.ForeignKey(Promotion, on_delete=models.CASCADE)
     enseignant = models.ForeignKey(Enseignant, on_delete=models.CASCADE)
 
+    is_cote_submited =  models.BooleanField(default=False)
+
     cote = models.FileField(upload_to='cotes/', max_length=100, blank=True, null=True)
 
 
@@ -103,6 +105,7 @@ class Cotes(models.Model):
     label=models.CharField(max_length=50,choices=LABELS, verbose_name='Type de travail')
     cote=models.DecimalField(max_digits=5, decimal_places=2, null=True, blank=True)
     ponderation=models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Pondération')
+    ponderation_blobal=models.DecimalField(max_digits=5, decimal_places=2, verbose_name='Pondération global')
     etudiant= models.ForeignKey(Etudiant, on_delete=models.CASCADE )
     date=models.DateField(auto_now=False, verbose_name='A remettre le')
     cours=models.ForeignKey(Cours, on_delete=models.CASCADE)

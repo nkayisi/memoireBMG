@@ -1,4 +1,5 @@
 import csv
+from django.db.models.aggregates import Sum
 from django.http.response import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, HttpResponseRedirect, HttpResponse
 
@@ -16,6 +17,8 @@ from django.contrib.auth.hashers import make_password
 
 
 from django.contrib import messages
+from requests.models import Response
+import urllib3
 
 from api.models import *
 
@@ -25,8 +28,18 @@ from .forms import CotesForm
 from api.utils import create_csv, write_csv
 
 import json
-import csv
+import csv, urllib
 import requests
+from django.db.models import Count
+import pandas as pd
+
+# Import mimetypes module
+import mimetypes
+# import os module
+import os
+# Import HttpResponse module
+from django.http.response import HttpResponse
+
 
 
 @login_required
@@ -39,12 +52,14 @@ def nouvelle_cote(request, cours_id):
             label = request.POST['label']
             ponderation = request.POST['ponderation']
             date = request.POST['date']
-
-            # recuperer les etudiants
-            etudiants = Etudiant.objects.all()
+            ponderation_blobal = request.POST['ponderation_blobal']
 
             # trouver le cours pour lequel on cree la fiche des cotes
             cours = Cours.objects.get(id=cours_id)
+
+            # recuperer les etudiants
+            etudiants = Etudiant.objects.all().filter(
+                departement=cours.departement, promotion=cours.promotion)
 
             # recuperer le dernier code de cours enfin de l'incrementer pour creer le nouveau
             cote = None
@@ -57,19 +72,129 @@ def nouvelle_cote(request, cours_id):
 
             # creer les objets cote a partir des la liste des etudiants
             for et in etudiants:
-                print(label,cote,ponderation,date,cours,code,)
+                print(label,cote,ponderation,date,cours,code,ponderation_blobal)
                 Cotes.objects.create(
                     label = label,
                     cote = None,
                     ponderation = ponderation,
                     date = date,
+                    ponderation_blobal = ponderation_blobal,
                     cours = cours,
                     code = code,
                     etudiant = et
                 )
 
-        return redirect('cotes')
+        return redirect('cotes',cours_id)
     return render(request, 'dashboard/pages/nouvelle_cote.html', {'form': form, 'cours_id':cours_id})
+
+
+def coter(request):
+    
+    cote = request.GET.get('cote', None)
+    travail_id = request.GET.get('travail_id', None)
+    
+    travail = get_object_or_404(Cotes, id=travail_id)
+    travail.cote = cote
+    travail.save()
+    
+    return HttpResponse('OK')
+
+
+def envoieCotes(request, cours_id):
+
+    cours = get_object_or_404(Cours, id=cours_id)
+    cotes = Cotes.objects.all().filter(cours=cours_id)
+    etudiants = Etudiant.objects.all().filter(departement=cours.departement, 
+                promotion=cours.promotion)
+
+
+    file = open(f'cotes/{cours.nom_cours}.csv', 'w')
+
+    writer = csv.writer(file)
+
+    writer.writerow(['Titre du cours : '+cours.nom_cours])
+    writer.writerow(['Nom de l\'enseigant : '
+                    +cours.enseignant.nom_enseignant +' '
+                    + cours.enseignant.post_nom_enseignant])
+    writer.writerow(['Matricules', 'TP', 'TD', 'Intérogation', 'Examen', 'Total'])
+    
+    
+
+    tps = cotes.filter(label='TP')
+    tds = cotes.filter(label='TD')
+    et_ints = cotes.filter(label='INT')
+    et_exs = cotes.filter(label='EX')
+
+    for etudiant in etudiants:
+
+        et_tps = tps.filter(etudiant=etudiant)
+        et_tds = tds.filter(etudiant=etudiant)
+        et_ints = et_ints.filter(etudiant=etudiant)
+        et_exs = et_exs.filter(etudiant=etudiant)
+
+        row = [etudiant.matricule]
+        totalMoyenne = 0;
+
+        if et_tps:
+            total = 0;
+            moyenne = 0;
+            sommePonderation = 0;
+            
+            for et_tp in et_tps:
+                total += et_tp.cote
+                sommePonderation+=et_tp.ponderation
+            moyenne = (total/sommePonderation)*et_tps[0].ponderation_blobal
+
+            row.append(moyenne)
+            totalMoyenne += moyenne
+
+        if et_tds:
+            total = 0;
+            moyenne = 0;
+            sommePonderation = 0;
+            for et_td in et_tds:
+                total += et_td.cote
+                sommePonderation+=et_td.ponderation
+            moyenne = (total/sommePonderation)*et_tds[0].ponderation_blobal
+
+            row.append(moyenne)
+            totalMoyenne += moyenne
+
+        if et_ints:
+            total = 0;
+            moyenne = 0;
+            sommePonderation = 0;
+            for et_int in et_ints:
+                total += et_int.cote
+                sommePonderation+=et_int.ponderation
+            moyenne = (total/sommePonderation)*et_ints[0].ponderation_blobal
+
+            row.append(moyenne)
+            totalMoyenne += moyenne
+
+
+        if et_exs:
+            total = 0;
+            moyenne = 0;
+            sommePonderation = 0;
+            for et_ex in et_exs:
+                total += et_ex.cote
+                sommePonderation+=et_ex.ponderation
+            moyenne = (total/sommePonderation)*et_exs[0].ponderation_blobal
+
+            row.append(moyenne)
+            totalMoyenne += moyenne
+            row.append(totalMoyenne)
+
+        writer.writerow(row)
+        cours.is_cote_submited = True
+        cours.save()
+
+        # Push a message on the template
+        messages.success(request, 'Les cotes des étudiants ont été remis avec succès !')
+
+
+    return redirect('cotes', cours_id)
 
 
 def loginView(request):
@@ -92,10 +217,9 @@ def loginView(request):
                 return redirect('accueil')
             elif group.name != 'admin':
                 login(request, user)
-                return redirect('cotes')
+                return redirect('cours-enseignant')
 
     return render(request, "dashboard/pages/login.html")
-
 
 
 
@@ -172,7 +296,63 @@ def accueil(request):
 
 
 @login_required
-def cotes(request):
+def cotes(request, cours_id):
+    try:
+        tps_count = []
+        tds_count = []
+        interros_count = []
+        examens_count = []
+        cotes_etudiant = []
+
+        cours = Cours.objects.filter(id=cours_id)
+
+        cotes = Cotes.objects.values('code','label','cours').annotate(dcount=Count('code')).order_by()
+ 
+
+        tps = Cotes.objects.all().filter(label='TP', cours=cours_id)
+        tds = Cotes.objects.all().filter(label='TD', cours=cours_id)
+        interros = Cotes.objects.all().filter(label='INT', cours=cours_id)
+        examens = Cotes.objects.all().filter(label='EX', cours=cours_id)
+
+
+        for cote in cotes:
+
+            if cote['cours']==cours_id and cote['label']=='TP':
+                tps_count.append(cote) 
+                cotes_etudiant = Cotes.objects.all().filter(code=cote['code'])
+            elif cote['cours']==cours_id and cote['label']=='TD':
+                tds_count.append(cote)
+                cotes_etudiant = Cotes.objects.all().filter(code=cote['code'])
+            elif cote['cours']==cours_id and cote['label']=='INT':
+                interros_count.append(cote)
+                cotes_etudiant = Cotes.objects.all().filter(code=cote['code'])
+            elif cote['cours']==cours_id and cote['label']=='EX':
+                examens_count.append(cote)
+                cotes_etudiant = Cotes.objects.all().filter(code=cote['code'])
+
+        pass
+    except:
+        messages.success(request, 'Connectez-vous avec un compte enseignant')
+        return redirect('login')
+
+    context={
+        'cours':cours,
+        'cotes': cotes,
+        'tps_count': tps_count,
+        'tds_count': tds_count,
+        'interros_count': interros_count,
+        'interros': interros,
+        'examens_count': examens_count,
+        'examens': examens,
+        'cotes_etudiant': cotes_etudiant,
+        'tps': tps,
+        'tds': tds
+    }
+    return render(request, 'dashboard/pages/cotes.html', context)
+
+
+@login_required
+def coursEnseignant(request):
     try:
         enseignant = Enseignant.objects.get(user=request.user)
         cours = Cours.objects.filter(enseignant=enseignant)
@@ -184,7 +364,7 @@ def cotes(request):
     context={
         'cours':cours
     }
-    return render(request, 'dashboard/pages/cotes.html', context)
+    return render(request, 'dashboard/pages/cours-enseignant.html', context)
 
 
 def SomeFunction(request):
@@ -205,18 +385,56 @@ def SomeFunction(request):
     return HttpResponse("OK")
 
 
+def download_file(request, course_id):
+    # Define Django project base directory
+    cours = Cours.objects.get(id=course_id)
+
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # Define text file name
+    filename = f'{cours.nom_cours}.csv'
+    # Define the full file path
+    filepath = '~/Downloads/' + filename
+    # Open the file for reading content
+    path = open(filepath, 'r')
+    # Set the mime type
+    mime_type, _ = mimetypes.guess_type(filepath)
+    # Set the return value of the HttpResponse
+    response = HttpResponse(path, content_type=mime_type)
+    # Set the HTTP header for sending to browser
+    response['Content-Disposition'] = "attachment; filename=%s" % filename
+    # Return the response value
+    response.save()
+    
+    return response
+
+
 
 def download_csv(request, course_id):
-    cours = Cours.objects.get(id=course_id)
-    req = requests.get('http://127.0.0.1:8000/'+cours.cote.url)
-    url_content = req.content
-    csv_file = open(f'cotes/{cours.nom_cours}.csv', 'wb')
 
-    csv_file.write(url_content)
-    csv_file.close()
+    cours = Cours.objects.get(id=course_id)
+    # req = requests.get(f'http://localhost:8000/cotes/{cours.nom_cours}.csv')
+
+    # url_content = req.content
+    # csv_file = open(f'cotes/{cours.nom_cours}.csv', 'wb')
+
+    # csv_file.write(url_content)
+    # # csv_file.close()
+
+    # Define the remote URL
+    url = f'http://localhost:8000/cotes/{cours.nom_cours}.csv'
+    # Send HTTP GET request via requests
+    data = requests.get(url)
+    # Convert to iterator by splitting on \n chars
+    lines = data.text.splitlines()
+    # Parse as CSV object
+    reader = csv.reader(lines)
+
+    # View Result
+    for row in reader:
+        print(row)
+
 
     return redirect('cours')
-
 
 @login_required
 def enseignant(request):
@@ -335,7 +553,7 @@ def universite(request):
         admin = User.objects.create_user(
             username=nom_utilisateur, 
             email=email,
-            password = make_password(motDePasse)
+            password = motDePasse
             )
         
         group = Group.objects.get(name='admin')
@@ -366,6 +584,11 @@ def universite(request):
 @login_required
 def profile(request):
     return render(request, 'dashboard/pages/profile.html')
+
+
+@login_required
+def question(request):
+    return render(request, 'dashboard/pages/question.html')
 
 
 @login_required

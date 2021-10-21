@@ -13,15 +13,21 @@ from api.utils import write_csv
 from django.http import HttpResponseForbidden
 
 
-class CoteApiView(APIView):
+# class CoteApiView(APIView):
 
-    def post(self, request, format=None):
-        print("DATA-1",request.data)
-        write_csv(request.data)
+#     def post(self, request, format=None):
+#         print("DATA-1",request.data)
+#         write_csv(request.data)
 
-        return HttpResponseForbidden()
+#         return HttpResponseForbidden()
 
 
+
+
+class CotesApiView(ModelViewSet):
+    serializer_class = CotesSerializer
+    def get_queryset(self):
+        return Cotes.objects.all()
 
 
 class UniversiteApiView(ModelViewSet):

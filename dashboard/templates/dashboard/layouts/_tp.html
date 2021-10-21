@@ -1,60 +1,47 @@
-<h3 class="mt-2">TRAVAUX PRATIQUES</h3>
+<h3 class="mt-4 mb-3">TRAVAUX PRATIQUES</h3>
 
-<table class="table mt-4">
+{% if tps %}
+<table class="table">
   <thead>
     <tr>
-      <th scope="col">Nom</th>
+      <th scope="col">Num</th>
       <th scope="col">Matricule</th>
-      <th scope="col">TP-1</th>
-      <th scope="col">TP-2</th>
+      {% for tp in tps_count %}
+        <th scope="col">TP-{{forloop.counter}}</th>
+      {% endfor %}
       <th scope="col">Total</th>
       <th scope="col">Moyenne</th>
     </tr>
   </thead>
   <tbody>
+
+  {% for cotes_et in cotes_etudiant %}
+  
     <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>
-        <input
-          class="form-control"
-          type="text"
-          placeholder="cote"
-          aria-label="example"
-        />
-      </td>
-      <td>
-        <input
-          class="form-control"
-          type="text"
-          placeholder="cote"
-          aria-label="example"
-        />
-      </td>
-      <td>@mdo</td>
-      <td>@mdo</td>
+
+      <th scope="row">{{forloop.counter}}</th>
+
+      <td>{{cotes_et.etudiant.matricule}}</td>
+
+        {% for tp in tps %}
+
+          {% if tp.etudiant.matricule ==  cotes_et.etudiant.matricule%}
+          <td >
+              <input type="hidden" value="{{tp.ponderation}}" class="ponderation"/>
+              <input type="number" step=".01" id="{{tp.id}}" class="form-control cote" 
+              type="text" placeholder="cote" aria-label="example" value="{{ tp.cote  }}"/>
+          </td>
+          {% endif %}
+
+        {% endfor %}
+
+        <td class="total"></td>
+
+      <td class="moyenne"></td>
+
     </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>
-        <input
-          class="form-control"
-          type="text"
-          placeholder="cote"
-          aria-label="example"
-        />
-      </td>
-      <td>
-        <input
-          class="form-control"
-          type="text"
-          placeholder="cote"
-          aria-label="example"
-        />
-      </td>
-      <td>@fat</td>
-      <td>@fat</td>
-    </tr>
+  {% endfor %}
   </tbody>
+
 </table>
+{% endif %}

@@ -6,4 +6,4 @@ from api.models import Cotes
 class CotesForm(ModelForm):
     class Meta:
         model = Cotes
-        fields = ['label','ponderation','date']
+        fields = ['label','ponderation','date', 'ponderation_blobal']

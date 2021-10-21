@@ -4,19 +4,33 @@
 
 <!--main content-->
 {% block contentDashboard %}
-
+ {% if messages %}
+      <ul class="message p-0" style="list-style-type: none;">
+          {% for message in messages %}
+              <li class="list-group-item-success"
+              style="font-size:15px; padding: 14px; text-align:center;">
+                  {{ message }}
+              </li>
+          {% endfor %}
+      </ul>
+  {% endif %}
 <h1>Cotes Etudiants</h1>
 <p class="mt-2">
   {% if cours %}
     {% for cr in cours %}
-    <a href="{% url 'nouvelle_cote' cr.id %}" class="btn btn-primary"
-      >Créer un nouveau travail</a
-    > pour le Cours de <strong>{{cr.nom_cours}}</strong>
+
+    <a href="{% url 'nouvelle_cote' cr.id %}" class="btn list-group-item-primary">
+      Créer un nouveau travail
+    </a> pour le Cours de <strong>{{cr.nom_cours}}</strong>
+
+    <a href="{% url 'envoi-cotes' cr.id  %}" class="btn list-group-item-secondary float-end">Soumettre les cotes</a>
+
     {% endfor %}
   {% else %}
     <p>On vous a attribuer aucun cours jusque là</p>
   {% endif %}
 </p>
+    
 <nav>
   <div class="nav nav-tabs" id="nav-tab" role="tablist">
     <button
@@ -39,7 +53,7 @@
       type="button"
       role="tab"
       aria-controls="nav-td"
-      aria-selected="false"
+      aria-selected="false" onclick="total_moyenne()"
     >
       Travaux Dirigés
     </button>
@@ -105,5 +119,9 @@
 </div>
 
 {% block script %}
-<script src="{% static 'dashboard/js/cotes.js' %}"></script>
-{% endblock script %} {% endblock contentDashboard %}
+
+  <script src="{% static 'dashboard/js/cotes.js' %}"></script>
+
+{% endblock script %}
+
+ {% endblock contentDashboard %}

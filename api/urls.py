@@ -18,12 +18,13 @@ router.register('promotion', PromotionApiView, basename='promotion')
 router.register('cours', CoursApiView, basename='cours')
 router.register('enseignant', EnseignantApiView, basename='enseignant')
 router.register('etudiant', EtudiantApiView, basename='etudiant')
+router.register('cotes', CotesApiView, basename='cotes')
 
 
 
 urlpatterns = [
 
     path('', include(router.urls)),
-    path('cote/', CoteApiView.as_view(), name="cote"),
+    # path('cote/', CoteApiView.as_view(), name="cote"),
     
 ]

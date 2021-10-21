@@ -1,0 +1,22 @@
+{% extends 'dashboard/layouts/_base.html' %}
+<!--static-->
+{% load static %}
+
+
+<!--main content-->
+{% block contentDashboard %}
+
+<main>
+
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info" aria-current="true">Tout les cours</li>
+      {% for c in cours %}
+      <a href="{% url 'cotes' c.id %}">
+        <li class="list-group-item">{{c.nom_cours}}</li>
+      </a>
+      {% endfor %}
+    </ul>    
+    
+</main>
+
+ {% endblock contentDashboard %}
