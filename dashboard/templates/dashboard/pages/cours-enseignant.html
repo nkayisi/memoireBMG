@@ -6,17 +6,23 @@
 <!--main content-->
 {% block contentDashboard %}
 
-<main>
+<main class="row">
 
+  <div>
+    <h4>Enseigant : {{request.user}}</h4>
+  </div>
+
+  <div class="col-md-5">
     <ul class="list-group">
-      <li class="list-group-item list-group-item-info" aria-current="true">Tout les cours</li>
+      <li class="list-group-item list-group-item-info" aria-current="true">Tout les cours déjà enseigner</li>
       {% for c in cours %}
       <a href="{% url 'cotes' c.id %}">
-        <li class="list-group-item">{{c.nom_cours}}</li>
+        <li class="list-group-item"><strong>{{c.nom_cours}}</strong>  -  {{c.promotion}} {{c.departement}} {{c.departement.faculte.universite.sigle}}</li>
       </a>
       {% endfor %}
     </ul>    
-    
+  </div>
+
 </main>
 
  {% endblock contentDashboard %}

@@ -28,7 +28,6 @@ urlpatterns = [
 
     path('logout/', dashboardViews.logOut, name="logout"),
     path('cotes/js/', dashboardViews.SomeFunction, name="cjs"),
-    path('download/csv/<str:course_id>/', dashboardViews.download_csv, name="download"),
 
     path('download/<str:course_id>/', dashboardViews.download_file, name="dwnl"),
 ]

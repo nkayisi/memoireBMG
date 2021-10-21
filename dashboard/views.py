@@ -28,15 +28,12 @@ from .forms import CotesForm
 from api.utils import create_csv, write_csv
 
 import json
-import csv, urllib
+import csv
 import requests
 from django.db.models import Count
-import pandas as pd
 
 # Import mimetypes module
 import mimetypes
-# import os module
-import os
 # Import HttpResponse module
 from django.http.response import HttpResponse
 
@@ -88,6 +85,7 @@ def nouvelle_cote(request, cours_id):
     return render(request, 'dashboard/pages/nouvelle_cote.html', {'form': form, 'cours_id':cours_id})
 
 
+@login_required
 def coter(request):
     
     cote = request.GET.get('cote', None)
@@ -100,6 +98,7 @@ def coter(request):
     return HttpResponse('OK')
 
 
+@login_required
 def envoieCotes(request, cours_id):
 
     cours = get_object_or_404(Cours, id=cours_id)
@@ -356,17 +355,20 @@ def coursEnseignant(request):
     try:
         enseignant = Enseignant.objects.get(user=request.user)
         cours = Cours.objects.filter(enseignant=enseignant)
+        universites = Universite.objects.all()
         pass
     except:
         messages.success(request, 'Connectez-vous avec un compte enseignant')
         return redirect('login')
 
     context={
-        'cours':cours
+        'cours':cours,
+        'universites': universites
     }
     return render(request, 'dashboard/pages/cours-enseignant.html', context)
 
 
+@login_required
 def SomeFunction(request):
     cotes = json.loads(request.GET['cotes'])
 
@@ -385,15 +387,15 @@ def SomeFunction(request):
     return HttpResponse("OK")
 
 
+@login_required
 def download_file(request, course_id):
-    # Define Django project base directory
+    
     cours = Cours.objects.get(id=course_id)
 
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     # Define text file name
     filename = f'{cours.nom_cours}.csv'
     # Define the full file path
-    filepath = '~/Downloads/' + filename
+    filepath = 'cotes/' + filename
     # Open the file for reading content
     path = open(filepath, 'r')
     # Set the mime type
@@ -403,38 +405,10 @@ def download_file(request, course_id):
     # Set the HTTP header for sending to browser
     response['Content-Disposition'] = "attachment; filename=%s" % filename
     # Return the response value
-    response.save()
     
     return response
 
 
-
-def download_csv(request, course_id):
-
-    cours = Cours.objects.get(id=course_id)
-    # req = requests.get(f'http://localhost:8000/cotes/{cours.nom_cours}.csv')
-
-    # url_content = req.content
-    # csv_file = open(f'cotes/{cours.nom_cours}.csv', 'wb')
-
-    # csv_file.write(url_content)
-    # # csv_file.close()
-
-    # Define the remote URL
-    url = f'http://localhost:8000/cotes/{cours.nom_cours}.csv'
-    # Send HTTP GET request via requests
-    data = requests.get(url)
-    # Convert to iterator by splitting on \n chars
-    lines = data.text.splitlines()
-    # Parse as CSV object
-    reader = csv.reader(lines)
-
-    # View Result
-    for row in reader:
-        print(row)
-
-
-    return redirect('cours')
 
 @login_required
 def enseignant(request):

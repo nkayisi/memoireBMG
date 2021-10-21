@@ -53,7 +53,7 @@
                                         <td> {{ cours.enseignant.nom_enseignant }} {{ cours.enseignant.post_nom_enseignant }} </td>
                                         <td> 
                                         {% if cours.is_cote_submited %}
-                                            <a class="btn list-group-item-primary btn-sm" href="{% url 'download' cours.id %}">Obtenir cote</a>
+                                            <a class="btn list-group-item-primary btn-sm" href="{% url 'dwnl' cours.id %}">Obtenir cote</a>
                                         {% else %}
                                             <p class="text-danger">Aucun cote</p>
                                         {% endif %}
