@@ -121,15 +121,15 @@ def envoieCotes(request, cours_id):
 
     tps = cotes.filter(label='TP')
     tds = cotes.filter(label='TD')
-    et_ints = cotes.filter(label='INT')
-    et_exs = cotes.filter(label='EX')
+    et_interros = cotes.filter(label='INT')
+    et_examens = cotes.filter(label='EX')
 
     for etudiant in etudiants:
 
         et_tps = tps.filter(etudiant=etudiant)
         et_tds = tds.filter(etudiant=etudiant)
-        et_ints = et_ints.filter(etudiant=etudiant)
-        et_exs = et_exs.filter(etudiant=etudiant)
+        et_ints = et_interros.filter(etudiant=etudiant)
+        et_exs = et_examens.filter(etudiant=etudiant)
 
         row = [etudiant.matricule]
         totalMoyenne = 0;
